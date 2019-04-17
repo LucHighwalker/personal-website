@@ -1,0 +1,42 @@
+version: "2"
+services:
+  frontend:
+    container_name: pwfrontend
+    restart: always
+    build: ./frontend/
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+    links:
+      - backend
+  backend:
+    container_name: pwbackend
+    restart: always
+    build: ./backend/
+    ports:
+      - "4200:4200"
+    depends_on:
+      - mongo
+    links:
+      - mongo
+  mongo:
+    container_name: pwmongo
+    image: mongo
+    volumes:
+      - /data/db
+    ports:
+      - "27017:27017"
+  portainer:
+    container_name: pwportainer
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:
