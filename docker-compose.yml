@@ -5,11 +5,16 @@ services:
     restart: always
     build: ./frontend/
     ports:
+      - "3000:3000"
       - "5000:5000"
     depends_on:
       - backend
     links:
       - backend
+    environment: 
+      - ENVIRONMENT=prod
+    volumes: 
+      - './frontend/src:/usr/src/app/frontend/src'
   backend:
     container_name: pwbackend
     restart: always
@@ -20,6 +25,17 @@ services:
       - mongo
     links:
       - mongo
+    environment: 
+      - ENVIRONMENT=prod
+      - HOST_URL=domain.com
+      - PORT=4200
+      - MONGO_URI=mongodb://mongo:27017/snapoo
+      - JWT_SECRET=averysecretsecret
+      - MAILGUN_API_KEY=amailgunapi
+      - EMAIL_DOMAIN=email.domain.com
+      - WAIT_HOSTS=mongo:27017
+    volumes: 
+      - './backend/src:/usr/src/app/backend/src'
   mongo:
     container_name: pwmongo
     image: mongo

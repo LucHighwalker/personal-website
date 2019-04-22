@@ -17,6 +17,8 @@
 pkg/
 src/
 
+docker-compose.override.yml
+
 ### Linux ###
 *~
 
